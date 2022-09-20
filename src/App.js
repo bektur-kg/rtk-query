@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import {useGetGoodsQuery, useRegisterMutation} from "./store/api/goodsApi";
 
 function App() {
+  const {data, isLoading} = useGetGoodsQuery()
+  const [register, registerData] = useRegisterMutation()
+
+
+  const registerHandler = async () => {
+    try {
+      await register({username: 'ea1s2112la112s3sfddfea', password: '2305kdseior'}).unwrap().then(res => {
+        console.log(res)
+      })
+
+      console.log(registerData)
+    }catch (e){
+      throw new Error(e.message)
+    }
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ul>
+        {
+          data?.results.map(item => (
+            <li
+              key={item.id}
+            >{item.name}</li>
+          ))
+        }
+      </ul>
+
+      <button onClick={registerHandler}>Register</button>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
